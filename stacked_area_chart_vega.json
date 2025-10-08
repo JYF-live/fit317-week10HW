@@ -8,7 +8,7 @@
   "width": 800,
   "height": 400,
   "data": {
-    "url": "Gust_data.csv"
+    "url": "https://raw.githubusercontent.com/JYF-live/fit317-week10HW/refs/heads/main/Gust_data.csv"
   },
   "params": [
     {
@@ -65,7 +65,7 @@
             "labelExpr": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][datum.value]"
           }
         },
-        "y": {"field": "non_safe_days", "type": "quantitative", "title": "Number of Non-Safe Wind Days", "stack": true},
+        "y": {"field": "non_safe_days", "type": "quantitative", "title": "Number of Windy Days", "stack": true},
         "color": {
           "field": "State",
           "type": "nominal",
