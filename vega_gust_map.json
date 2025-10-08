@@ -1,0 +1,50 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Number of Days with Hazerdous Wind gusts in Australia",
+    "subtitle": "Data Source: Bureau of Meteorology",
+    "subtitleFontStyle": "italic",
+    "fontSize": 16,
+    "anchor": "start",
+    "color": "#000000"
+  },
+  "width": 800,
+  "height": 600,
+  "data": {
+    "url": "https://raw.githubusercontent.com/JYF-live/fit3179/refs/heads/main/STE_2016_AUST.topojson",
+    "format": {
+      "type": "topojson", "feature": "STE_2016_AUST"
+    }
+  },
+  "transform": [
+    {
+      "lookup": "properties.STE_NAME16",
+      "from": {
+        "data": {
+          "url": "https://raw.githubusercontent.com/JYF-live/fit3179/refs/heads/main/Gusty_Days.csv"
+        },
+        "key": "State",
+        "fields": ["gustDays"]
+      }
+    }
+  ],
+  "projection": {
+    "type": "mercator"
+  },
+  "mark": {
+    "type": "geoshape",
+    "stroke": "white"
+  },
+  "encoding": {
+    "color": {
+      "field": "gustDays",
+      "type": "quantitative",
+      "title": "Wind Warning Days (>62 km/h)",
+      "scale": { "scheme": "bluepurple" }
+    },
+    "tooltip": [
+      { "field": "properties.STE_NAME16", "type": "nominal", "title": "State" },
+      { "field": "gustDays", "type": "quantitative", "title": "Wind Warning Days" }
+    ]
+  }
+}
