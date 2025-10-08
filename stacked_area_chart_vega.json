@@ -5,8 +5,8 @@
     "fontSize": 16,
     "anchor": "start"
   },
-  "width": 800,
-  "height": 400,
+  "width": 500,
+  "height": 350,
   "data": {
     "url": "https://raw.githubusercontent.com/JYF-live/fit317-week10HW/refs/heads/main/Gust_data.csv"
   },

@@ -8,8 +8,8 @@
     "anchor": "start",
     "color": "#000000"
   },
-  "width": 800,
-  "height": 600,
+  "width": 500,
+  "height": 350,
   "data": {
     "url": "https://raw.githubusercontent.com/JYF-live/fit3179/refs/heads/main/STE_2016_AUST.topojson",
     "format": {

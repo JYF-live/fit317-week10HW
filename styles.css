@@ -11,7 +11,7 @@ body {
 }
 
 .page {
-    width: 850px;
+    width: 1200px;
     background-color: white;
     margin: auto;
     padding: 50px;
@@ -20,6 +20,21 @@ body {
 
 .vis-container {
     width: 100%;
+    height: auto;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vis-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.pure-u-1-2 {
+    box-sizing: border-box;
+    padding: 0 10px;
 }
 
 .description h2,
