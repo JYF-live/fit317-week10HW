@@ -10,9 +10,29 @@
 <script src="vega_lite_vis.js"></script>
 </head>
 <body>
-<div id="bar_chart">
-</div>
-<div id="stacked_chart">    
-</div>
+<div class = "page">
+    <h1>Windy Days in Australia</h1>
+    <p>This page contains two visualisations about windy days in Australia from 2007 to 2017.</p>
+<div class ="pure-g">
+    <div class="pure-u-1-2">
+        <div class="description description-left">
+        <h2>Map of Windy Days in Australia</h2>
+        <p>This map shows the number of windy days in each state for the year with the most windy days overall.</p>
+        </div>
+    </div>
+    <div class="pure-u-1-2">
+        <div class="description description-right">
+        <h2>Stacked Area Chart of Windy Days in Australia</h2>
+        <p>This stacked area chart shows the trend of windy days in each state over the years.</p>
+        </div>
+    </div>
+    <div class="pure-u-1-2">
+        <div id="map_chart" class="vis-container"></div>
+        </div>
+    <div class="pure-u-1-2">
+        <div id="stacked_chart" class="vis-container"></div>
+        </div>
+    </div>
+        
 </body>
 </html>
