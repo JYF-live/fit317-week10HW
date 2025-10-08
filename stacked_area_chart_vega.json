@@ -1,0 +1,118 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Windy Days (>62km/h) by Top 3 States (Monthly View)",
+    "fontSize": 16,
+    "anchor": "start"
+  },
+  "width": 800,
+  "height": 400,
+  "data": {
+    "url": "Gust_data.csv"
+  },
+  "params": [
+    {
+      "name": "selected_year",
+      "value": 2008,
+      "bind": {
+        "input": "range",
+        "min": 2008,
+        "max": 2017,
+        "step": 1,
+        "name": "Select Year: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "calculate": "year(datum.Date)",
+      "as": "year"
+    },
+    {
+      "calculate": "month(datum.Date)",
+      "as": "month"
+    },
+    {
+      "calculate": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][datum.month]",
+      "as": "month_name"
+    },
+    {
+      "filter": "datum.WindCata != 'Safe'"
+    },
+    {
+      "filter": "indexof(['New South Wales', 'Victoria', 'Tasmania'], datum.State) >= 0"
+    },
+    {
+      "filter": "datum.year == selected_year"
+    }
+  ],
+  "layer": [
+    {
+      "transform": [
+        {
+          "aggregate": [{"op": "count", "as": "non_safe_days"}],
+          "groupby": ["year", "month", "month_name", "State"]
+        }
+      ],
+      "mark": {"type": "area", "interpolate": "monotone", "opacity": 0.8},
+      "encoding": {
+        "x": {
+          "field": "month",
+          "type": "quantitative",
+          "title": "Month",
+          "scale": {"domain": [0, 11]},
+          "axis": {
+            "labelExpr": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][datum.value]"
+          }
+        },
+        "y": {"field": "non_safe_days", "type": "quantitative", "title": "Number of Non-Safe Wind Days", "stack": true},
+        "color": {
+          "field": "State",
+          "type": "nominal",
+          "scale": {"domain": ["New South Wales", "Victoria", "Tasmania"], "range": ["#e41a1c", "#377eb8", "#4daf4a"]},
+          "legend": {"title": "State", "orient": "right"}
+        },
+        "tooltip": [
+          {"field": "State", "type": "nominal"},
+          {"field": "month_name", "type": "nominal", "title": "Month"},
+          {"field": "year", "type": "ordinal", "title": "Year"},
+          {"field": "non_safe_days", "type": "quantitative", "title": "Non-Safe Days"}
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [{"op": "count", "as": "total_days"}],
+          "groupby": ["month", "month_name"]
+        },
+        {
+          "aggregate": [{"op": "argmax", "field": "total_days", "as": "peak"}]
+        },
+        {"calculate": "datum.peak.month", "as": "peak_month"},
+        {"calculate": "datum.peak.total_days", "as": "peak_days"},
+        {"calculate": "datum.peak.month_name", "as": "peak_month_name"}
+      ],
+      "layer": [
+        {
+          "mark": {"type": "point", "shape": "cross", "size": 200, "color": "black", "strokeWidth": 3},
+          "encoding": {
+            "x": {"field": "peak_month", "type": "quantitative", "scale": {"domain": [0, 11]}},
+            "y": {"field": "peak_days", "type": "quantitative"}
+          }
+        },
+        {
+          "mark": {"type": "text", "align": "center", "baseline": "bottom", "dy": -15, "fontSize": 12, "fontWeight": "bold", "color": "black"},
+          "encoding": {
+            "x": {"field": "peak_month", "type": "quantitative", "scale": {"domain": [0, 11]}},
+            "y": {"field": "peak_days", "type": "quantitative"},
+            "text": {"field": "peak_month_name", "type": "nominal"}
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "area": {"stroke": "white", "strokeWidth": 1}
+  }
+}
