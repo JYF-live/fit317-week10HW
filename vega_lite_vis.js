@@ -4,20 +4,13 @@ vegaEmbed("#map_chart", vg_1, {
     height: 300,
     actions: false
 }).then(function(result) {
-    // Optional: resize chart when window resizes
-    window.addEventListener('resize', function() {
-        result.view.resize();
-    });
+    
 }).catch(console.error);
 
-var vg_2 = "stacked_area_chart_vega.json";
-vegaEmbed("#stacked_chart", vg_2, {
+var vg_2 = "bar_chart_windy_days.json";
+vegaEmbed("#bar_chart", vg_2, {
     width: 400,
     height: 300,
     actions: false
 }).then(function(result) {
-    // Optional: resize chart when window resizes
-    window.addEventListener('resize', function() {
-        result.view.resize();
-    });
 }).catch(console.error);

@@ -1,0 +1,150 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Windy Days (>62km/h) by Top 3 States - Bar Chart",
+    "fontSize": 16,
+    "anchor": "start"
+  },
+  "width": 500,
+  "height": 350,
+  "data": {
+    "url": "https://raw.githubusercontent.com/JYF-live/fit317-week10HW/refs/heads/main/Gust_data.csv"
+  },
+  "params": [
+    {
+      "name": "selected_year",
+      "value": 2008,
+      "bind": {
+        "input": "range",
+        "min": 2008,
+        "max": 2017,
+        "step": 1,
+        "name": "Select Year: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "calculate": "year(datum.Date)",
+      "as": "year"
+    },
+    {
+      "calculate": "month(datum.Date)",
+      "as": "month"
+    },
+    {
+      "calculate": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][datum.month]",
+      "as": "month_name"
+    },
+    {
+      "filter": "datum.WindCata != 'Safe'"
+    },
+    {
+      "filter": "indexof(['New South Wales', 'Victoria', 'Tasmania'], datum.State) >= 0"
+    },
+    {
+      "filter": "datum.year == selected_year"
+    },
+    {
+      "aggregate": [{"op": "count", "as": "non_safe_days"}],
+      "groupby": ["year", "month", "month_name", "State"]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "opacity": 0.8,
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "month",
+          "type": "ordinal",
+          "title": "Month",
+          "axis": {
+            "labelExpr": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][datum.value]"
+          }
+        },
+        "y": {
+          "field": "non_safe_days",
+          "type": "quantitative",
+          "title": "Number of Windy Days"
+        },
+        "xOffset": {
+          "field": "State",
+          "type": "nominal"
+        },
+        "color": {
+          "field": "State",
+          "type": "nominal",
+          "scale": {
+            "domain": ["New South Wales", "Victoria", "Tasmania"],
+            "range": ["#e41a1c", "#377eb8", "#4daf4a"]
+          },
+          "legend": {
+            "title": "State",
+            "orient": "right"
+          }
+        },
+        "tooltip": [
+          {"field": "State", "type": "nominal"},
+          {"field": "month_name", "type": "nominal", "title": "Month"},
+          {"field": "year", "type": "ordinal", "title": "Year"},
+          {"field": "non_safe_days", "type": "quantitative", "title": "Windy Days"}
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [{"op": "sum", "field": "non_safe_days", "as": "total_days"}],
+          "groupby": ["month", "month_name"]
+        },
+        {
+          "aggregate": [{"op": "argmax", "field": "total_days", "as": "peak"}]
+        },
+        {"calculate": "datum.peak.month", "as": "peak_month"},
+        {"calculate": "datum.peak.total_days", "as": "peak_days"},
+        {"calculate": "datum.peak.month_name", "as": "peak_month_name"}
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "point",
+            "shape": "cross",
+            "size": 200,
+            "color": "black",
+            "strokeWidth": 3
+          },
+          "encoding": {
+            "x": {"field": "peak_month", "type": "ordinal"},
+            "y": {"field": "peak_days", "type": "quantitative"}
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "baseline": "bottom",
+            "dy": -15,
+            "fontSize": 12,
+            "fontWeight": "bold",
+            "color": "black"
+          },
+          "encoding": {
+            "x": {"field": "peak_month", "type": "ordinal"},
+            "y": {"field": "peak_days", "type": "quantitative"},
+            "text": {"field": "peak_month_name", "type": "nominal"}
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "bar": {
+      "cornerRadius": 2
+    }
+  }
+}
